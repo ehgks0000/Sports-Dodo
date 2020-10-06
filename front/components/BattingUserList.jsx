@@ -1,40 +1,46 @@
 import { Col, Row } from 'antd';
 import React from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { wrapper } from '../store';
 import { useSelector, useDispatch } from 'react-redux';
 import { LOAD_BATTING_USER_REQUEST } from '../sagas/user';
 import { useEffect } from 'react';
 
 const BattingUserList = ({ data }) => {
+  const router = useRouter();
   const { battingUser } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  const userid = data.userid;
-
-  // console.log(userid);
-  // console.log(battingUser);
+  const { userid } = data;
 
   useEffect(() => {
     dispatch({
       type: LOAD_BATTING_USER_REQUEST,
       data: userid,
     });
-  }, []);
+  }, [userid]);
 
-  // console.log(data);
-  // console.log(battingUser);
-
-  //이름이랑 닉네임 제대로 안나옴
   return data ? (
     <Row>
       <Row style={{ fontSize: '1px', marginBottom: '5em' }}>
-        <Link href={{ pathname: 'profile', query: { userid: userid } }}>
+        <Col
+          onClick={() => {
+            router.push(
+              {
+                pathname: 'profile',
+                query: { userid },
+                // query: { userid, userid },
+              },
+              `profile/${battingUser?.nickname}`
+            );
+          }}
+        >
           <a>
             {data?.userid}
-            {battingUser?.name} / {battingUser?.nickname}
+            {battingUser?.name} / {battingUser?.nickname} /{data?.battingPoint}p
           </a>
-        </Link>
-        / {data?.battingPoint}p
+          {/* 리덕스에서 이름 닉네임 왜 제대로 안불러옴?  */}
+        </Col>
       </Row>
     </Row>
   ) : (

@@ -25,6 +25,7 @@ import {
 import { AlignCenterOutlined, SyncOutlined } from '@ant-design/icons';
 import SizeContext from 'antd/lib/config-provider/SizeContext';
 import Notification from '../components/Notification';
+import { useRouter } from 'next/router';
 require('moment-timezone');
 
 // const limit = 100;
@@ -32,15 +33,9 @@ moment.tz.setDefault('Asia/Seoul');
 const time_format = 'YYYY/MM/DD-HH:mm A';
 const nowTime = moment().format(time_format);
 
-const testTag = (startTime, finishTime) => {
-  if (nowTime > startTime && nowTime < finishTime) {
-    // console.log(e); startTime < nowTime < finishTime
-    return ' 게임 중';
-  } else {
-    return ''; //내용 없으면 태그 쩜 왜 그럴까?
-  }
-};
 const matchings = () => {
+  const router = useRouter();
+
   const columns = [
     // {
     //   title: 'key',
@@ -158,47 +153,56 @@ const matchings = () => {
       align: 'left',
       render: (_id, record) => {
         return (
-          <Link href={{ pathname: 'match', query: { matchid: _id } }}>
-            <a>
-              <Button
-                type="primary"
-                htmlType="submit"
-                danger
-                // style={{ marginLeft: '5px' }}
-              >
-                배팅
-              </Button>
-              {nowTime > record.startTime ? (
-                <Tag style={{ marginLeft: '1em' }} color="#ff1e00">
-                  마감
-                </Tag>
-              ) : nowTime > record.deadLine ? (
-                <Tag style={{ marginLeft: '1em' }} color="#e04612">
-                  마감 5분 전
-                </Tag>
-              ) : nowTime > record.deadLine_1 ? (
-                <Tag style={{ marginLeft: '1em' }} color="#e08312">
-                  마감 1시간 전
-                </Tag>
-              ) : nowTime > record.deadLine_24 ? (
-                <Tag style={{ marginLeft: '1em' }} color="#00bfa6">
-                  마감 하루 전
-                </Tag>
-              ) : null}
+          <>
+            <Button
+              type="primary"
+              htmlType="submit"
+              onClick={() => {
+                router.push(
+                  {
+                    pathname: 'match',
+                    query: { matchid: _id },
+                  }
+                  // `/match/${record.key}`
+                  // asPath 주소창에 보이는 주소 설정
+                );
+              }}
+              danger
+              // style={{ marginLeft: '5px' }}
+            >
+              배팅
+            </Button>
+            {nowTime > record.startTime ? (
+              <Tag style={{ marginLeft: '1em' }} color="#ff1e00">
+                마감
+              </Tag>
+            ) : nowTime > record.deadLine ? (
+              <Tag style={{ marginLeft: '1em' }} color="#e04612">
+                마감 5분 전
+              </Tag>
+            ) : nowTime > record.deadLine_1 ? (
+              <Tag style={{ marginLeft: '1em' }} color="#e08312">
+                마감 1시간 전
+              </Tag>
+            ) : nowTime > record.deadLine_24 ? (
+              <Tag style={{ marginLeft: '1em' }} color="#00bfa6">
+                마감 하루 전
+              </Tag>
+            ) : null}
 
-              {nowTime > record.startTime && nowTime < record.finishTime ? (
-                <Tag style={{ marginLeft: '1em' }} color="#8c00bf">
-                  게임 중
-                </Tag>
-              ) : null}
-            </a>
-          </Link>
+            {nowTime > record.startTime && nowTime < record.finishTime ? (
+              <Tag style={{ marginLeft: '1em' }} color="#8c00bf">
+                게임 중
+              </Tag>
+            ) : null}
+          </>
         );
       },
     },
   ];
-
   const { me } = useSelector((state) => state.user);
+  const { matchs, matchsHistory } = useSelector((state) => state.match);
+
   const dispatch = useDispatch();
   useEffect(() => {
     if (!me) {
@@ -211,7 +215,6 @@ const matchings = () => {
     dispatch({ type: LOAD_MATCHS_HISTORY_REQUEST });
     // dispatch({ type: LOAD_MATCHS_REQUEST, index: -1 });
   }, [me]);
-  const { matchs, matchsHistory } = useSelector((state) => state.match);
 
   if (!matchs)
     return (

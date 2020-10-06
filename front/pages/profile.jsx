@@ -3,7 +3,7 @@ import { Row, Col, Avatar, Alert, notification, Card } from 'antd';
 import { wrapper } from '../store';
 import styled from 'styled-components';
 import { LOAD_USER_REQUEST, LOAD_BATTING_USER_REQUEST } from '../sagas/user';
-import { useRouter } from 'next/dist/client/router';
+import { useRouter } from 'next/router';
 import { useSelector, useDispatch } from 'react-redux';
 import Notification from '../components/Notification';
 import ProfileBattingLine from '../components/ProfileBattingLine';
@@ -28,18 +28,18 @@ const profile = () => {
 
   const dispatch = useDispatch();
   const router = useRouter();
-  const userid = router.query.userid;
+  const { userid } = router.query;
   useEffect(() => {
     if (!me) {
-      Notification('로그인이 필요합니다!');
-      // <Alert message="로그인이 필요합니다!" type="warning" showIcon closable />;
+      // Notification('로그인이 필요합니다!');
+      <Alert message="로그인이 필요합니다!" type="warning" showIcon closable />;
       // router.push('/');
     }
   }, [me]);
 
   useEffect(() => {
     dispatch({ type: LOAD_BATTING_USER_REQUEST, data: userid });
-  }, []);
+  }, [userid, me]);
   return (
     <>
       <Row
@@ -104,9 +104,12 @@ const profile = () => {
             </Col>
           </Row>
           {/* api/user/{me.id} */}
-          {battingUser?.battings?.map((batting) => (
-            <ProfileBattingLine batting={batting}></ProfileBattingLine>
-          ))}
+          {battingUser?.battings
+            ?.slice(0)
+            .reverse()
+            .map((batting) => (
+              <ProfileBattingLine batting={batting}></ProfileBattingLine>
+            ))}
         </Row>
       </BattingsCard>
     </>

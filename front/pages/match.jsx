@@ -20,7 +20,6 @@ import {
   Button,
   Divider,
   message,
-  Image,
 } from 'antd';
 import { FlexDiv } from '../styles/styled-components';
 import { AlignCenterOutlined, SyncOutlined } from '@ant-design/icons';
@@ -102,13 +101,13 @@ const divideHistory = (bat_history) => {
       ? object.draw.push(array)
       : object.away.push(array);
   });
-  console.log(object);
+  // console.log(object);
   return object;
 };
 
 const match = () => {
   const router = useRouter();
-  const matchid = router.query.matchid;
+  const { matchid } = router.query;
 
   const { me } = useSelector((state) => state.user);
   const { battingHistory } = useSelector((state) => state.batting);
@@ -182,9 +181,6 @@ const match = () => {
 
   const startTime = moment(match?.startTime).format('MM/DD hh:mm');
   const deadLine = moment(match?.startTime).subtract(5, 'minutes').format();
-
-  const goalsHomeTeam = match?.goalsHomeTeam;
-  const goalsAwayTeam = match?.goalsAwayTeam;
 
   const homeTotalPoint = bpoint?.battingPoints?.homeTotalPoint;
   const awayTotalPoint = bpoint?.battingPoints?.awayTotalPoint;
@@ -264,7 +260,7 @@ const match = () => {
   };
 
   return (
-    <div className="imgTest">
+    <Row className="matchFullScreenImg">
       <Row
         style={{
           height: '100%',
@@ -287,7 +283,7 @@ const match = () => {
               <Avatar
                 size={100}
                 src={homeImg}
-                style={{ backgroundColor: 'white' }}
+                style={{ backgroundColor: 'transparent' }}
               />
             </Row>
             <Row>
@@ -323,7 +319,7 @@ const match = () => {
               <Avatar
                 size={100}
                 src={awayImg}
-                style={{ backgroundColor: 'white' }}
+                style={{ backgroundColor: 'transparent' }}
               />
             </Row>
             <Row>
@@ -343,8 +339,10 @@ const match = () => {
           </Col>
         </Row>
         <Row style={{ marginBottom: '2rem' }}>
-          <Row>{venue}</Row>
-          <Row>주심 : {referee()}</Row>
+          <strong>
+            <Row>{venue}</Row>
+            <Row>주심 : {referee()}</Row>
+          </strong>
         </Row>
         <FlexDiv width="100%" direction="column">
           <FlexDiv>
@@ -446,7 +444,9 @@ const match = () => {
         {/* 디바이더 사용하기 */}
         <Row align="center">
           <Col span={7}>
-            <Row style={{ marginBottom: '1rem' }}>Home</Row>
+            <Row style={{ marginBottom: '1rem' }}>
+              <strong>Home</strong>
+            </Row>
             {dividedHistory?.home?.map((data, i) => (
               <BattingUserList key={`home${i}`} data={data} />
             ))}
@@ -456,7 +456,9 @@ const match = () => {
             <Divider type="vertical" />
           </Col>
           <Col span={7}>
-            <Row style={{ marginBottom: '1rem' }}>Draw</Row>
+            <Row style={{ marginBottom: '1rem' }}>
+              <strong>Draw</strong>
+            </Row>
             {dividedHistory?.draw?.map((data, i) => (
               <BattingUserList key={`draw${i}`} data={data} />
             ))}
@@ -465,14 +467,16 @@ const match = () => {
             <Divider type="vertical" />
           </Col>
           <Col span={7}>
-            <Row style={{ marginBottom: '1rem' }}>Away</Row>
+            <Row style={{ marginBottom: '1rem' }}>
+              <strong>Away</strong>
+            </Row>
             {dividedHistory?.away?.map((data, i) => (
               <BattingUserList key={`away${i}`} data={data} />
             ))}
           </Col>
         </Row>
       </Row>
-    </div>
+    </Row>
   );
 };
 //match/id 검색
