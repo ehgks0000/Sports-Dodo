@@ -5,7 +5,8 @@
   "scripts": {
     "test": "set NODE_ENV=test && mocha -timeout 1000000",
     "build": "node index.js",
-    "dev": "set NODE_ENV=dev && nodemon index.js"
+    "dev": "set NODE_ENV=dev && nodemon index.js",
+    "start": "node index.js"
   },
   "author": "",
   "license": "MIT",
