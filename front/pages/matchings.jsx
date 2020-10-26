@@ -174,25 +174,35 @@ const matchings = () => {
             </Button>
             {nowTime > record.startTime ? (
               <Tag style={{ marginLeft: '1em' }} color="#ff1e00">
-                마감
+                {/* 마감 */}
+                Close
               </Tag>
             ) : nowTime > record.deadLine ? (
               <Tag style={{ marginLeft: '1em' }} color="#e04612">
-                마감 5분 전
+                {/* 마감 5분 전 */}
+                5 Minutes
               </Tag>
             ) : nowTime > record.deadLine_1 ? (
               <Tag style={{ marginLeft: '1em' }} color="#e08312">
-                마감 1시간 전
+                {/* 마감 1시간 전 */}
+                1 Hour
               </Tag>
             ) : nowTime > record.deadLine_24 ? (
               <Tag style={{ marginLeft: '1em' }} color="#00bfa6">
-                마감 하루 전
+                {/* 마감 하루 전 */}
+                1 Day
               </Tag>
-            ) : null}
+            ) : nowTime > record.deadLine_7d ? (
+              <Tag style={{ marginLeft: "1em"}} color="#8c00bf">
+                {/* 마감 일주일 전 */}
+                1 Week
+              </Tag>
+            ): null}
 
             {nowTime > record.startTime && nowTime < record.finishTime ? (
-              <Tag style={{ marginLeft: '1em' }} color="#8c00bf">
-                게임 중
+              <Tag style={{ marginLeft: '1em' }} color="#b52278">
+                {/* 게임 중  // api finishTime 이상함 강제로 2시간 후 종료  */}
+                In game
               </Tag>
             ) : null}
           </>
@@ -231,7 +241,7 @@ const matchings = () => {
         </Row>
       </Row>
     );
-  const matchsData = [];
+  let matchsData = [];
   for (let i = 0; i < matchs?.length; i++) {
     matchsData.push({
       key: i + 1,
@@ -247,6 +257,9 @@ const matchings = () => {
       deadLine_24: moment(matchs[i].startTime)
         .subtract(1, 'd')
         .format(time_format),
+      deadLine_7d: moment(matchs[i].startTime)
+        .subtract(7, 'd')
+        .format(time_format),
       // 마감시간 설정
       howManyPeopleBatted:
         matchs[i].homeBattingNumber +
@@ -255,13 +268,13 @@ const matchings = () => {
     });
   }
 
-  const matchsHistoryData = [];
+  let matchsHistoryData = [];
   for (let i = 0; i < matchsHistory?.length; i++) {
     matchsHistoryData.push({
       key: i + 1,
       ...matchsHistory[i],
       startTime: moment(matchsHistory[i].startTime).format(time_format),
-      finishTime: moment(matchsHistory[i].finishTime).format(time_format),
+      finishTime: moment(matchsHistory[i].startTime).add(2, "h").format(time_format),
       deadLine: moment(matchsHistory[i].startTime)
         .subtract(5, 'minutes')
         .format(time_format),
@@ -271,7 +284,7 @@ const matchings = () => {
         matchsHistory[i].drawBattingNumber,
     });
   }
-
+  
   return (
     <Row
       style={{
