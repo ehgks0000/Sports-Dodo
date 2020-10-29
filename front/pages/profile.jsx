@@ -56,7 +56,7 @@ const profile = () => {
           </Col>
           <Col span={16}>
             <h2>
-              <b>{battingUser?.name}</b>
+              <b>{battingUser?.nickname}</b>
             </h2>
             <h2>
               <b>포인트 : </b>

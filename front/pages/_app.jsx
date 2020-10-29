@@ -11,9 +11,25 @@ import { LOAD_USER_REQUEST } from '../sagas/user';
 import moment from 'moment';
 import { LOAD_MAIN_MATCHS_REQUEST } from '../sagas/match';
 import { useDispatch, useSelector } from 'react-redux';
+
+import { Router } from 'next/router';
+
+import NProgress from "nprogress";
+import "nprogress/nprogress.css"
+
 require('moment-timezone');
 
+Router.events.on("routeChangeStart", ()=>{
+  NProgress.start();
+})
+Router.events.on("routeChangeComplete", ()=>{
+  NProgress.done();
+})
+Router.events.on("routeChangeError", ()=>{
+  NProgress.done();
+})
 const MyApp = ({ Component, pageProps }) => {
+  // const router = useRouter();
   const dispatch = useDispatch();
   const { me } = useSelector((state) => state.user);
 
