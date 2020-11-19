@@ -1,0 +1,19 @@
+{
+  "name": "sports-dodo",
+  "version": "1.0.0",
+  "description": "<br/>",
+  "main": "prettier.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ehgks0000/Sports-Dodo.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ehgks0000/Sports-Dodo/issues"
+  },
+  "homepage": "https://github.com/ehgks0000/Sports-Dodo#readme"
+}

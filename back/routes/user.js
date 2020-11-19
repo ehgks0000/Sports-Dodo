@@ -41,7 +41,9 @@ router
   .get(getUser)
   .put(protect, editUser);
 
-router.route('/login').post(login);
+router
+  .route('/login')
+  .post(login);
 // router.get("/logout", logout);
 
 module.exports = router;

@@ -12,7 +12,10 @@ const battingRouter = require('./routes/batting');
 const schedule = require('node-schedule');
 
 const connectDB = require('./config/db');
-const { bringThreeDayLaterMatchs, bringMatchFromAPI } = require('./api/bringNewMatchs');
+const {
+  bringThreeDayLaterMatchs,
+  bringMatchFromAPI,
+} = require('./api/bringNewMatchs');
 const { dummyDatas } = require('./utils/dummy');
 const {
   bringFinishedDataAndEditMatch,

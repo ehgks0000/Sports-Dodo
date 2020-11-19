@@ -11,14 +11,14 @@ import { LOAD_USER_REQUEST } from '../sagas/user';
 import moment from 'moment';
 import { LOAD_MAIN_MATCHS_REQUEST } from '../sagas/match';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { Router } from 'next/router';
-
 import NProgress from "nprogress";
 import "nprogress/nprogress.css"
 
 require('moment-timezone');
 
+
+NProgress.configure({ showSpinner: false });
 Router.events.on("routeChangeStart", ()=>{
   NProgress.start();
 })
